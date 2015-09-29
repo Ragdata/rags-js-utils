@@ -1,58 +1,40 @@
 /**
- * Capitalise the first letter of each word in a string
+ * String prototype alias for ucwords()
  *
  * @returns {string}
  */
-String.prototype.ucwords = function(){ return this.replace( /\w+/g, function( str ){ return str.charAt( 0 ).toUpperCase() + str.slice( 1 ).toLowerCase(); } ); };
+String.prototype.ucwords = function(){ return ucwords( this ); };
 /**
- * Capitalise the first letter of a string
+ * String prototype alias for ucfirst()
  *
  * @returns {string}
  */
-String.prototype.ucfirst = function(){ return this.charAt( 0 ).toUpperCase() + this.slice( 1 ).toLowerCase(); };
+String.prototype.ucfirst = function(){ return ucfirst( this ); };
 /**
- * Pluralise a string
+ * String prototype alias for plural()
  *
- * @param   items   integer [optional - defaults to 0]
- * @param   suffix  string  [optional - defaults to 's']
- * @param   offset  integer [optional - would normally be a negative integer]
+ * @param   {number}    [items]     Number of Items (defining plural state) - defaults to 0
+ * @param   {string}    [suffix]    String Suffix - defaults to 's'
+ * @param   {number}    [offset]    Number of characters to strip from end before applying suffix - normally negative
  *
  * @returns {string}
  */
-String.prototype.plural = function( items, suffix, offset )
-{
-    items   = ( typeof items  !== 'undefined' ) ? items : 0 ;
-    suffix  = ( typeof suffix !== 'undefined' ) ? suffix : 's' ;
-    offset  = ( typeof offset !== 'undefined' ) ? offset : 0 ;
-
-    if( items == 0 || items > 1 )
-    {
-        if( offset == 0 )
-        {
-            return this + suffix;
-        }
-        else
-        {
-            return this.slice( 0, offset ) + suffix;
-        }
-    }
-    return this;
-};
+String.prototype.plural = function( items, suffix, offset ){ return plural( this, items, suffix, offset ); };
 /**
  * String prototype alias for lpad()
  *
- * @param   size    integer     [optional - defaults to 1]
- * @param   char    mixed       [optional - defaults to '0']
+ * @param   {number}    [size]      Final String Size   - defaults to 1
+ * @param   {string}    [char]      Pad Character       - defaults to '0'
  *
- * @returns {*|string}
+ * @returns {string}
  */
 String.prototype.lpad = function( size, char ){ return lpad( this, size, char ); };
 /**
  * String prototype alias for number_format()
  *
- * @param   prec    integer     [optional - defaults to 0]
- * @param   dec     string      [optional - defaults to '.']
- * @param   sep     string      [optional - defaults to ',']
+ * @param   {number}    [prec]      Decimal Precision   - defaults to 0
+ * @param   {string}    [dec]       Decimal Character   - defaults to '.'
+ * @param   {string}    [sep]       Thousands Separator - defaults to ','
  *
  * @returns {string}
  */
@@ -60,14 +42,14 @@ String.prototype.number_format = function( prec, dec, sep ){ return number_forma
 /**
  * Left-Pad a string ... built with zero-padding numbers in mind
  *
- * @param   string  mixed
- * @param   size    integer     [optional - defaults to 1]
- * @param   char    mixed       [optional - defaults to '0']
+ * @param   {string|number} string      String to Left-Pad
+ * @param   {number}        [size]      Final String Size   - defaults to 1
+ * @param   {string}        [char]      Pad Character       - defaults to '0'
  *
- * @returns {*|string}
+ * @returns {string|number}
  */
-function lpad( string, size, char )
-{
+function lpad( string, size, char ){
+
     var a;
     var d;
     var dec;
@@ -99,15 +81,15 @@ function lpad( string, size, char )
 /**
  * Format a 'number' with grouped thousands
  *
- * @param   number  mixed
- * @param   prec    integer         [optional - defaults to 0]
- * @param   dec     string          [optional - defaults to '.']
- * @param   sep     string          [optional - defaults to ',']
+ * @param   {string|number} number      'Number' to Format
+ * @param   {number}        [prec]      Decimal Precision   - defaults to 0
+ * @param   {string}        [dec]       Decimal Character   - defaults to '.'
+ * @param   {string}        [sep]       Thousands Separator - defaults to ','
  *
- * @returns {string}
+ * @returns {string|number}
  */
-function number_format( number, prec, dec, sep )
-{
+function number_format( number, prec, dec, sep ){
+
     number = parseFloat( number );
 
     prec = ( typeof prec !== 'undefined' ) ? prec : 0 ;
@@ -127,3 +109,48 @@ function number_format( number, prec, dec, sep )
     }
     return ( number < 0 ? '-' : '' ) + numberString + formattedNumber + ( decimalString ? ( dec + decimalString ) : '' );
 }
+/**
+ * Pluralise a string
+ *
+ * @param   {string}    string      String to Pluralise
+ * @param   {number}    [items]     Number of Items (defining plural state) - defaults to 0
+ * @param   {string}    [suffix]    String Suffix - defaults to 's'
+ * @param   {number}    [offset]    Number of characters to strip from end before applying suffix - normally negative
+ *
+ * @returns {string}
+ */
+function plural( string, items, suffix, offset ){
+
+    items   = ( typeof items  !== 'undefined' ) ? items : 0 ;
+    suffix  = ( typeof suffix !== 'undefined' ) ? suffix : 's' ;
+    offset  = ( typeof offset !== 'undefined' ) ? offset : 0 ;
+
+    if( items == 0 || items > 1 )
+    {
+        if( offset == 0 )
+        {
+            return string + suffix;
+        }
+        else
+        {
+            return string.slice( 0, offset ) + suffix;
+        }
+    }
+    return string;
+}
+/**
+ * Capitalise the first letter of a string
+ *
+ * @param   {string} string
+ *
+ * @returns {string}
+ */
+function ucfirst( string ){ return string.charAt( 0 ).toUpperCase() + string.slice( 1 ).toLowerCase(); }
+/**
+ * Capitalise the first letter of each word in a string
+ *
+ * @param   {string} string
+ *
+ * @returns {string}
+ */
+function ucwords( string ){ return string.replace( /\w+/g, function( string ){ return string.charAt( 0 ).toUpperCase() + string.slice( 1 ).toLowerCase(); } ); }
